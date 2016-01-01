@@ -103,10 +103,11 @@ def initCrawled():
     lines = f.xreadlines()
     for l in lines:
         crawled.append(l.split()[1])
+    f.close()
 initCrawled()
 begin = time.time()
 q = Queue.Queue()
-q.put('http://music.163.com/song?id=30500021')
+q.put('http://music.163.com/song?id=366577')
 for i in range(threadNUM):
     t = threading.Thread(target = working)
     t.setDaemon(True)

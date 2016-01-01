@@ -64,36 +64,40 @@ def saveComments(musicid):
 		#pprint(req.json())
 		cmmts = ''
 		for content in req.json()['hotComments']:
-		    cmmts += (content['user']['nickname'].encode('utf-8')+':'+content['content'].encode('utf-8'))+'\n'
-
-		for content in req.json()['comments']:
-		    cmmts += (content['user']['nickname'].encode('utf-8')+':'+content['content'].encode('utf-8'))+'\n'
-		f = open('comment/'+musicid+'.txt','w')
-		f.write(cmmts)
-		f.close()
+		    cmmts += (content['content'].encode('utf-8'))+'；'
 		print musicid,'comment done'
+		return cmmts
 	except Exception,e:
 		print 'save comment failed' + musicid
 		print e
+		return None
 
 
-def saveLyrics(musicid,musicName='',artistName='',albumName=''):
+def saveLyrics(musicid):
 	headers = {
 	    'Cookie': 'appver=1.5.0.75771;',
 	    'Referer': 'http://music.163.com/'
 	}
 	url = 'http://music.163.com/api/song/media?id='+musicid
+	try:
+		req = requests.post(url, headers=headers)
+		if('lyric' in req.json().keys()):
+			
 
-	req = requests.post(url, headers=headers)
-	if('lyric' in req.json().keys()):
-		f = open('lrc/'+musicid+'.lrc','w')
-		f.write('['+musicName+'\t'+artistName+'\t'+albumName+']\r\n')
-		f.write(req.json()['lyric'].encode('utf-8'))
-		f.close()
-		print musicid,'lyric done'
-	else:
-		print musicid , 'no lyric'
+			lrcText = req.json()['lyric']
+			if(lrcText!=None):
+				f = open('lrc/'+musicid+'.lrc','w')
+				f.write(lrcText.encode('utf-8'))
+				f.close()
+			#print musicid,'lyric done'
+			return lrcText
+		else:
+			#print musicid , 'no lyric'
+			return None
+	except Exception,e:
+		print e
+		return None
  
-print saveComments('33469996')
+#print saveComments('33469996')
 
 
