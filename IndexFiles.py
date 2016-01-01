@@ -85,10 +85,10 @@ class IndexFiles(object):
     def indexDocs(self, writer):
 
         f = codecs.open('index.txt','r',encoding='utf-8')
-        files = []
+        files = set()
         for line in f.xreadlines():
             ls = line.split()
-            files.append(ls[0][:-5])
+            files.add(ls[0][:-5])
         f.close()
 
         for item in files:
@@ -119,7 +119,7 @@ class IndexFiles(object):
                 lrc = f.read()
                 f.close()
 
-            contentToIndex = music_name + ' ' + artist + ' ' + album_name + ' ' + description + ' ' + lrc + ' '
+            contentToIndex = music_name*200 + ' ' + artist*200 + ' ' + album_name + ' ' + description + ' ' + lrc*100 + ' '
 
             doc = Document()
             doc.add(Field("musicID", item ,

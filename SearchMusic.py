@@ -28,7 +28,7 @@ def parseCommand(command):
     command_dict = {}
     
     for i in command.split(' '):
-        opt = 'contents'
+        opt = 'content'
         if ':' in i:
             opt, value = i.split(':')[:2]
             opt = opt.lower()
@@ -59,18 +59,14 @@ def run(searcher, analyzer):
         querys = BooleanQuery()
         command_dict = parseCommand(command)
         for k,v in command_dict.iteritems():            
-            if(k=='site'):
-                t = Term('url','*'+v.strip()+'*')
-                query = WildcardQuery(t)
-            else:
-                query = QueryParser(Version.LUCENE_CURRENT, k,analyzer).parse(v)
+            query = QueryParser(Version.LUCENE_CURRENT, k,analyzer).parse(v)
             querys.add(query, BooleanClause.Occur.MUST)
         scoreDocs = searcher.search(querys, 10).scoreDocs
         
         print "%s total matching documents." % len(scoreDocs)
         simpleHTMLFormatter = SimpleHTMLFormatter("<font color='red'>", "</font>")
 
-        queryToHigh = QueryParser(Version.LUCENE_CURRENT,"contents",analyzer).parse(command_dict['contents'])
+        queryToHigh = QueryParser(Version.LUCENE_CURRENT,"content",analyzer).parse(command_dict['content'])
 
         hlter = Highlighter(simpleHTMLFormatter,QueryScorer(queryToHigh))
         hlter.setTextFragmenter(SimpleFragmenter(500))
@@ -78,15 +74,15 @@ def run(searcher, analyzer):
             doc = searcher.doc(scoreDoc.doc)
             print '------------------------------------------'
             #print 'path:', doc.get("path"), 'name:', doc.get("name"),'site:', doc.get('site')
-            print 'title:',doc.get('title'),
+            print 'music_name:',doc.get('music_name'),
             print 'url:',doc.get('url')
-            ori_text = clear(doc.get('contents'))
-            output = hlter.getBestFragment(analyzer,"contents",ori_text)
-            print output
+            ori_text = clear(doc.get('content'))
+            #output = hlter.getBestFragment(analyzer,"content",ori_text)
+            #print output
         #scoreDocs = searcher.searchAfter(querys,1,50).scoreDocs
 
 if __name__ == '__main__':
-    STORE_DIR = "index_lucene_v3_highlight"
+    STORE_DIR = "indexFORsongs"
     initVM(vmargs=['-Djava.awt.headless=true'])
     print 'lucene', VERSION
     directory = SimpleFSDirectory(File(STORE_DIR))
