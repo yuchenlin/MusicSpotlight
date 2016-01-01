@@ -119,7 +119,9 @@ class IndexFiles(object):
                 lrc = f.read()
                 f.close()
 
-            contentToIndex = music_name*200 + ' ' + artist*200 + ' ' + album_name + ' ' + description + ' ' + lrc*100 + ' '
+            import jieba
+            music_name_2 = ' '.join(jieba.cut(music_name))
+            contentToIndex = music_name_2*50 + ' ' + artist + ' ' + album_name + ' ' + description + ' ' + lrc + ' '
 
             doc = Document()
             doc.add(Field("musicID", item ,
