@@ -1,0 +1,112 @@
+$def with(keyword,res_list,page_index,page_size,total,crctKW,havecrct,relevList)
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>$keyword Page:$page_index@ Linoole SE</title>
+		<meta charset="utf-8"/>
+		<link rel="stylesheet" type="text/css" href="static/css/css.css">
+	</head>
+	<body> 
+
+		<div style="margin-top: 20px;margin-left: 20px">
+		<table>
+		<tr>
+		<td class="w-70">
+		<form action="/s" method="GET" >
+		<input type="text" style="font-family:courier;width: 400px" placeholder="tell me what you want" value="$keyword" name="keyword">&nbsp;&nbsp;&nbsp;
+		<input type="submit" class="button button-blue" style="font-family:courier" value="Search Songs" name="typ" />&nbsp;&nbsp;&nbsp;
+		</form>
+		</td>
+		<td><img src='static/logo.png' height="60" width="200" / ></td></tr>
+		</table>
+
+		</div>
+			$if(havecrct):
+				<br>
+				<div style="margin-top: 5px;margin-left: 20px">
+						<span class='msg msg-red font-black'>您想搜索的是不是：<a href='/s?keyword=$crctKW'>$crctKW</a></span><br>
+				</div>
+				<br>
+		<br>
+		<div class="nav nav-blue" style="font-family:courier;margin-left:20px;margin-right:20px">
+	   		<a class="nav-item nav-head" href="/s?keyword=$keyword&p=1">First Page(1)</a>&nbsp;
+		$for i in range(max(2,page_index-3),min(page_index+8,total/page_size+1)):
+			$if(i==page_index):
+				<a class="nav-item nav-head" href="/s?keyword=$keyword&p=$i" >$i</a>&nbsp;
+			$else:
+				<a class="nav-item" href="/s?keyword=$keyword&p=$i" >$i</a>&nbsp;
+	<a class="nav-item nav-head"  href="/s?keyword=$keyword&p=$(total/page_size+1)">Last Page($(total/page_size+1))</a>&nbsp;
+	<a class="nav-item right"  href="#">Total: $total</a>&nbsp;
+	
+	    </div>
+	    <table>
+	    <tr>
+	    	<td class="w-50"> 
+	    		 <div id="resultList" style="margin: 20px" >
+				    <br><br>
+					$if total>0:
+						$for item in res_list[:4]:
+							$if item[5]!= None:
+							<div id="res" class="w-50">
+								<h4><a class="font-blue" target="view_window" href="$item[0]">$item[1] @ $item[2] - 专辑：《$item[3]》 </a></h4>	<br>
+								<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=420 height=86 src="http://music.163.com/outchain/player?type=2&id= $item[6] &auto=0&height=66"></iframe>
+								<br>
+								<div class='msg msg-gray font-black' style="width:560px;height:80px;margin-left:10px"><h5>
+									......$:item[5].replace(' ','').replace('_forblank_',' ')......
+									</h5>
+										</div>
+								<br>
+								<br>
+							</div>
+					$else:
+					    Sorry, there is no result for your query.
+				    </div>
+	    	</td>
+	    	<td class="w-50"> 
+	    		<div id="resultList" style="margin: 20px" >
+				    <br><br>
+					$if total>4:
+						$for item in res_list[4:]:
+							$if item[5]!= None:
+							<div id="res" class="w-50">
+								<h4><a class="font-blue" target="view_window" href="$item[0]">$item[1] @ $item[2] - 专辑：《$item[3]》 </a></h4>	<br>
+								<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=420 height=86 src="http://music.163.com/outchain/player?type=2&id= $item[6] &auto=0&height=66"></iframe>
+								<br>
+								<div class='msg msg-gray font-black' style="width:560px;height:80px;margin-left:10px"><h5>
+									......$:item[5].replace(' ','').replace('_forblank_',' ')......
+									</h5>
+										</div>
+								<br>
+								<br>
+							</div> 
+				    </div>
+	    	</td>
+	    </tr>
+	    </table>
+	   
+    	
+    	
+    	$if(len(relevList)==9):
+	    	<div class="msg msg-yellow w-40" style="margin-left: 20px">
+	    		<h4>相关搜索</h4>
+	    		<br>
+	    		<table>
+	    			<tr>
+	    				<td class="w-33"><a href="/s?keyword=$relevList[0]">$relevList[0]</a></td>
+	    				<td class="w-33"><a href="/s?keyword=$relevList[1]">$relevList[1]</a></td>
+	    				<td class="w-33"><a href="/s?keyword=$relevList[2]">$relevList[2]</a></td>
+	    			</tr>
+	    			<tr>
+	    				<td class="w-30"><a href="/s?keyword=$relevList[3]">$relevList[3]</a></td>
+	    				<td class="w-30"><a href="/s?keyword=$relevList[4]">$relevList[4]</a></td>
+	    				<td class="w-30"><a href="/s?keyword=$relevList[5]">$relevList[5]</a></td>
+	    			</tr>
+	    			<tr>
+	    				<td class="w-33"><a href="/s?keyword=$relevList[6]">$relevList[6]</a></td>
+	    				<td class="w-33"><a href="/s?keyword=$relevList[7]">$relevList[7]</a></td>
+	    				<td class="w-33"><a href="/s?keyword=$relevList[8]">$relevList[8]</a></td>
+	    			</tr>
+	    		</table>
+	    	</div> 
+    </body>
+</html>

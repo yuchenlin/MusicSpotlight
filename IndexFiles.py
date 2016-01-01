@@ -148,6 +148,9 @@ class IndexFiles(object):
             doc.add(Field("lrc", lrc,
                                  Field.Store.YES,
                                  Field.Index.ANALYZED))
+            doc.add(Field("description", description,
+                                 Field.Store.YES,
+                                 Field.Index.ANALYZED))
 
             doc.add(Field("content", contentToIndex,
                                  Field.Store.YES,
